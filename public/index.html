@@ -1,11 +1,116 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>Neuro Dress Up!</title>
 </head>
+
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <div class="neuro-holder">
+            <span class="dress-up-element">
+                <img id="hairstyle-back-image">
+            </span>
+            <span class="dress-up-element">
+                <img id="base-body-image">
+            </span>
+            <span class="dress-up-element">
+                <img id="bottom-image">
+            </span>
+            <span class="dress-up-element">
+                <img id="top-image">
+            </span>
+            <span class="dress-up-element">
+                <img id="hairstyle-image">
+            </span>
+            <span class="dress-up-element">
+                <img id="eyes-image">
+            </span>
+            <span class="dress-up-element">
+                <img id="head-decoration-image">
+            </span>
+            <span class="arrows-columns-wrapper">
+                <span class="arrows left">
+                        <button class="arrow-left" data-type="hairstyle" title="Hairstyle"><-</button>
+                        <button class="arrow-left" data-type="head-decoration" title="Head/Face Decoration"><-</button>
+                        <button class="arrow-left" data-type="top" title="Shirt"><-</button>
+                        <button style="visibility: hidden;"><-</button>
+                        <button class="arrow-left" data-type="bottom" title="Pants"><-</button>
+                </span>
+                <span class="arrows right">
+                        <button class="arrow-right" data-type="hairstyle" title="Hairstyle">-></button>
+                        <button class="arrow-right" data-type="head-decoration" title="Head/Face Decoration">-></button>
+                        <button class="arrow-right" data-type="top" title="Shirt">-></button>
+                        <button style="visibility: hidden;">-></button>
+                        <button class="arrow-right" data-type="bottom" title="Pants">-></button>
+                </span>
+            </span>
+        </div>
+    </div>
     <script src="bundle.js"></script>
+    <style>
+        body { 
+            display: none;
+            width: 100%;
+            height: 100vh;
+        }
+        #app {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position:relative;
+            height: 100vh;
+        }
+        .neuro-holder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position:relative;
+            width: 350px;
+            height: 450px;
+            padding:10px;
+        }
+        .arrows-columns-wrapper{
+            display: flex;
+            justify-content: space-between;
+            width: 350px;
+            height: 400px;
+        }
+        .arrows{
+            /* arranged to the left vertically with equel spacing  */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* 2 columns, one on the very left and one on the very right */
+            align-items: flex-start;
+        }
+        /* .arrows.left {
+            left: 0;
+        } */
+        .arrows.right {
+            align-items: flex-end;
+        }
+        .arrows button {
+            z-index: 100;
+        }
+        .dress-up-element {
+            display: inline-block;
+            width: 350px;
+            height: 450px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        
+        .dress-up-element img {
+            width: 350px;
+            height: 450px;
+            outline: none;
+        }
+    </style>
 </body>
+
 </html>
