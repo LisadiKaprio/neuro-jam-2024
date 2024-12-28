@@ -1,6 +1,7 @@
 import {Color, Style} from './ClothingTypes';
 
 export const pathToArt = "art/";
+export const pathToVedal = "vedal/";
 
 export enum ClothingElement {
     TOP = "top",
@@ -89,7 +90,7 @@ export const hairstyleItems = [
     {
         imagePath: "face-empty",
         colors: [],
-        styles: [],
+        styles: [Style.PUNK],
     },
     {
         imagePath: "hair-front-punk-twintails",
@@ -102,7 +103,7 @@ export const headItems = [
     {
         imagePath: "face-empty",
         colors: [],
-        styles: [Style.PUNK, Style.WEIRD],
+        styles: [],
     },
     {
         imagePath: "head-maid",

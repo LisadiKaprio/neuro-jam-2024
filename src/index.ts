@@ -1,27 +1,14 @@
 import {Color, Style} from './ClothingTypes';
-import {topItems, bottomItems, headItems, hairstyleItems, ClothingElement, pathToArt} from './ClothingItems';
-
-  enum Condition {
-    SAME_COLOR = "SAME_COLOR",
-    SAME_STYLE = "SAME_STYLE",
-    MIXED_STYLES = "MIXED_STYLES",
-    // Add more conditions as needed
-  }
+import {topItems, bottomItems, headItems, hairstyleItems, ClothingElement, pathToArt, pathToVedal} from './ClothingItems';
+import { OutfitFeedbackDeterminator } from './VedalSystem';
   
-  interface ClothingItem {
+  export interface ClothingItem {
     imagePath: string;
     colors: Color[];
     styles: Style[];
 }
-  
-  interface FeedbackMessage {
-    message: string;
-    spritePath: string;
-    priority: number;
-  }
-  
   // Clothing piece class
-  class ClothingPiece {
+  export class ClothingPiece {
     items: ClothingItem[];
     currentIndex: number = 0;
     type: ClothingElement;
@@ -69,6 +56,7 @@ class DressUpGame {
     hairstyle: ClothingPiece;
     feedbackWindow!: HTMLElement;
     randomizeButton!: HTMLElement;
+    feedbackButton!: HTMLElement;
   
     constructor() {
       // Initialize clothing pieces with their respective items
@@ -134,6 +122,15 @@ class DressUpGame {
       this.appContainer.appendChild(this.randomizeButton);
       this.randomizeButton.addEventListener('click', () => {
         this.randomizeOutfit();
+      });
+
+      // Create vedal button
+      this.feedbackButton = document.createElement('button');
+      this.feedbackButton.className = 'feedback-button';
+      this.feedbackButton.textContent = 'Show to Vedal';
+      this.appContainer.appendChild(this.feedbackButton);
+      this.feedbackButton.addEventListener('click', () => {
+        this.showFeedback();
       });
     });
     }
@@ -213,74 +210,12 @@ class DressUpGame {
   
       this.feedbackWindow.innerHTML = `
         <div class="feedback-content">
-          <img src="${feedback.spritePath}" alt="Feedback Character">
+          <img src="${pathToArt}${pathToVedal}${feedback.vedal}.png" class="vedal" alt="Vedal">
           <p>${feedback.message}</p>
-          <button onclick="this.parentElement.parentElement.classList.add('hidden')">Close</button>
+          <button onclick="this.parentElement.parentElement.classList.add('hidden')">Try another outfit</button>
         </div>
       `;
       this.feedbackWindow.classList.remove('hidden');
-    }
-  }
-  
-  // Feedback determinator class
-  class OutfitFeedbackDeterminator {
-    private static readonly feedbackMessages: Record<Condition, FeedbackMessage> = {
-      [Condition.SAME_COLOR]: {
-        message: "Wow, monochrome! Bold choice!",
-        spritePath: "assets/feedback-sprites/excited.png",
-        priority: 2
-      },
-      [Condition.SAME_STYLE]: {
-        message: "Love how committed you are to the style!",
-        spritePath: "assets/feedback-sprites/happy.png",
-        priority: 1
-      },
-      [Condition.MIXED_STYLES]: {
-        message: "Interesting mix of styles!",
-        spritePath: "assets/feedback-sprites/thoughtful.png",
-        priority: 0
-      }
-    };
-  
-    static determineFeedback(
-      bottom: ClothingItem,
-      top: ClothingItem,
-      head: ClothingItem,
-      hair: ClothingItem
-    ): FeedbackMessage {
-      const conditions: Condition[] = [];
-  
-      // Check for same color
-      if (this.allSameColor([bottom, top, head, hair])) {
-        conditions.push(Condition.SAME_COLOR);
-      }
-  
-      // Check for same style
-      if (this.allSameStyle([bottom, top, head, hair])) {
-        conditions.push(Condition.SAME_STYLE);
-      }
-  
-      // If no other conditions met, it's mixed styles
-      if (conditions.length === 0) {
-        conditions.push(Condition.MIXED_STYLES);
-      }
-  
-      // Return feedback with highest priority
-      return this.feedbackMessages[
-        conditions.reduce((a, b) => 
-          this.feedbackMessages[a].priority > this.feedbackMessages[b].priority ? a : b
-        )
-      ];
-    }
-  
-    private static allSameColor(items: ClothingItem[]): boolean {
-      const colors = new Set(items.flatMap(item => item.colors));
-      return colors.size === 1;
-    }
-  
-    private static allSameStyle(items: ClothingItem[]): boolean {
-      const styles = new Set(items.flatMap(item => item.styles));
-      return styles.size === 1;
     }
   }
   

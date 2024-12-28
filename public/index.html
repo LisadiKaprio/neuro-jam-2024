@@ -93,7 +93,7 @@
             align-items: flex-end;
         }
         .arrows button {
-            z-index: 100;
+            z-index: 10;
         }
         .dress-up-element {
             display: inline-block;
@@ -109,6 +109,32 @@
             width: 350px;
             height: 450px;
             outline: none;
+        }
+        .hidden {
+            display: none;
+            }
+
+        .vedal {
+            width: 200px;
+            filter: drop-shadow(0 0 25px rgba(136, 181, 92, 0.5));
+            height: 200px;
+        }
+        .feedback-content {
+            width: 200px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            line-height: 19px;
+            background-color: rgba(232, 232, 232, 0.9);
+            border: 5px double rgb(99, 80, 41);;
+            z-index: 30;
+            padding: 8px;
         }
     </style>
 </body>
