@@ -93,8 +93,17 @@ export class DressUpGame {
           ...this.hairstyle.items
         ]
         const allImages = clothings.map((clothing) => pathToArt + clothing.imagePath + ".png");
+        const evilHairstyles = this.hairstyle.items.map((hairstyle) => pathToArt + hairstyle.imagePath + "-evil.png");
+        allImages.push(...evilHairstyles);
         const vedalImages = Object.entries(OutfitFeedbackDeterminator.feedbackMessages).map((feedback) => pathToArt + pathToVedal + feedback[1].vedal + ".png");
-        allImages.push()
+        allImages.push(...vedalImages);
+        allImages.push(...[
+            pathToArt + "eyes-neuro" + ".png",
+            pathToArt + "eyes-evil" + ".png",
+            pathToArt + "cat-ears" + ".png",
+            pathToArt + "cat-tail" + ".png",
+            ]
+        )
         allImages.forEach((imagePath) => {
           const img = new Image();
           img.src = imagePath;
@@ -126,9 +135,9 @@ export class DressUpGame {
   
   private checkBackHairstyle(imagePath: string): void {
     const backHairstyle = document.querySelector(`#hairstyle-back-image`) as HTMLImageElement;
-    if (["hair-front-classic-neuro", "hair-front-headband"].includes(imagePath) && backHairstyle) {
+    if (["hair-front-classic", "hair-front-classic-evil", "hair-front-headband", "hair-front-headband-evil"].includes(imagePath) && backHairstyle) {
       backHairstyle.src = pathToArt + "hair-back-classic-neuro" + ".png";
-    } else if (imagePath === "hair-front-clown-twintails" && backHairstyle) {
+    } else if (["hair-front-clown-twintails"].includes(imagePath) && backHairstyle) {
       backHairstyle.src = pathToArt + "hair-back-clown-twintails" + ".png";
     }
     else if (backHairstyle) {
@@ -242,10 +251,19 @@ export class DressUpGame {
     }
   
     private updateClothingDisplay(type: ClothingElement, item: ClothingItem): void {
-      const img = document.querySelector(`#${type}-image`) as HTMLImageElement;
-      if (img && item.imagePath) {
-        img.src = pathToArt + item.imagePath + ".png";
-      }
+
+        let evilSuffix = "";
+        if (this.isEvil && type === ClothingElement.HAIRSTYLE) {
+            evilSuffix = "-evil";
+        }
+
+        console.log(evilSuffix);
+
+        const clothingImage = document.querySelector(`#${type}-image`) as HTMLImageElement;
+        if (clothingImage && item.imagePath) {
+            console.log(pathToArt + item.imagePath + evilSuffix + ".png");
+            clothingImage.src = pathToArt + item.imagePath + evilSuffix + ".png";
+        }
       if (type === ClothingElement.HAIRSTYLE) {
         this.checkBackHairstyle(item.imagePath);
       }
@@ -305,6 +323,7 @@ export class DressUpGame {
             this.drawEyes();
             this.evilButton.textContent = 'Play as Evil instead';
         }
+      this.updateClothingDisplay(ClothingElement.HAIRSTYLE, this.hairstyle.current());
     }
     
     private handleMeow(): void {

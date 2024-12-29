@@ -9,6 +9,70 @@ export interface FeedbackMessage {
 
 const STORAGE_KEY = "unlockedConditions";
 
+// 0
+// : 
+// "DEFAULT"
+// 1
+// : 
+// "ALMOST_MAID"
+// 2
+// : 
+// "MAID_DISRESPECT"
+// 3
+// : 
+// "FULL_PUNK_SET"
+// 4
+// : 
+// "GOOD_TRY"
+// 5
+// : 
+// "COOL"
+// 6
+// : 
+// "A_BIT_COMFY"
+// 7
+// : 
+// "CRAZY"
+// 8
+// : 
+// "DANGER"
+// 9
+// : 
+// "FULL_CUTE_SET"
+// 10
+// : 
+// "TOO_YOUNG"
+// 11
+// : 
+// "ERM"
+// 12
+// : 
+// "FULL_COZY_SET"
+// 13
+// : 
+// "FULL_MAID_SET"
+// 14
+// : 
+// "WHAT"
+// 15
+// : 
+// "LAUGHING"
+// 16
+// : 
+// "SAME_COLOR"
+// 17
+// : 
+// "FULL_WEIRD_SET"
+// 18
+// : 
+// "WEIRDGE"
+// 19
+// : 
+// "GREENSCREEN"
+// 20
+// : 
+// "HAPPY_WHEEZE"
+
 enum Condition {
     SAME_COLOR = "SAME_COLOR",
     WHAT = "WHAT",
@@ -25,7 +89,7 @@ enum Condition {
     MAID_DISRESPECT = "MAID_DISRESPECT",
     LAUGHING = "LAUGHING",
     HAPPY_WHEEZE = "HAPPY_WHEEZE",
-    FOR_REAL = "FOR_REAL",
+    // FOR_REAL = "FOR_REAL",
     GREENSCREEN = "GREENSCREEN",
     DANGER = "DANGER",
     TOO_YOUNG = "TOO_YOUNG",
@@ -95,10 +159,10 @@ export class OutfitFeedbackDeterminator {
             message: "Trying to look like a maid? Go do my laundry then.",
             vedal: "sarcastic"
         },
-        [Condition.FOR_REAL]: {
-            message: "For real? You want to show up on stream like that?",
-            vedal: "bored"
-        },
+        // [Condition.FOR_REAL]: {
+        //     message: "For real? You want to show up on stream like that?",
+        //     vedal: "bored"
+        // },
         [Condition.WEIRDGE]: {
             message: "Not exactly my cup of tea, but the weirdos in chat will love it.",
             vedal: "sarcastic"

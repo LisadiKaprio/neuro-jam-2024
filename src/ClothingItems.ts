@@ -67,11 +67,6 @@ export const topItems = [
         styles: [Style.COZY, Style.REVEALING],
     },
     {
-        imagePath: "top-heart-sweater",
-        colors: [Color.BROWN],
-        styles: [Style.COZY, Style.REVEALING],
-    },
-    {
         imagePath: "top-maid-neko",
         colors: [Color.BLACK_WHITE],
         styles: [Style.MAID, Style.CUTE],
@@ -138,7 +133,7 @@ export const bottomItems = [
 
 export const hairstyleItems = [
     {
-        imagePath: "hair-front-classic-neuro",
+        imagePath: "hair-front-classic",
         colors: [Color.RED],
         styles: [],
     },
