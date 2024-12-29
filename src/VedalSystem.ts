@@ -1,4 +1,4 @@
-import { ClothingItem } from ".";
+import { ClothingItem } from "./GameLogic";
 import { Color, Style } from "./ClothingTypes";
 
 
@@ -6,6 +6,8 @@ export interface FeedbackMessage {
     message: string;
     vedal: string;
 }
+
+const STORAGE_KEY = "unlockedConditions";
 
 enum Condition {
     SAME_COLOR = "SAME_COLOR",
@@ -22,13 +24,29 @@ enum Condition {
     ALMOST_MAID = "ALMOST_MAID",
     MAID_DISRESPECT = "MAID_DISRESPECT",
     LAUGHING = "LAUGHING",
-    HAPPY_WHEEZE = "HAPPY_WHEEZE"
+    HAPPY_WHEEZE = "HAPPY_WHEEZE",
+    FOR_REAL = "FOR_REAL",
+    GREENSCREEN = "GREENSCREEN",
+    DANGER = "DANGER",
+    TOO_YOUNG = "TOO_YOUNG",
+    WEIRDGE = "WEIRDGE",
+    GOOD_TRY = "GOOD_TRY",
+    ALRIGHT = "ALRIGHT",
+    CRAZY = "CRAZY"
 }
 
 
 // Feedback determinator class
 export class OutfitFeedbackDeterminator {
-    private static readonly feedbackMessages: Record<Condition, FeedbackMessage> = {
+    public static feedbackMessages: Record<Condition, FeedbackMessage> = {
+        [Condition.DANGER]: {
+            message: "W-Where did you get that from? H-ha-ha, put it down, please... *backs away slowly*",
+            vedal: "surprised"
+        },
+        [Condition.GREENSCREEN]: {
+            message: "Good, now you can do a PC Building Stream of your own, and I will be the one doing the commentary.",
+            vedal: "happy"
+        },
         [Condition.FULL_COZY_SET]: {
             message: "Sure, you can have my old pyjamas. They'll come in handy during the subathon.",
             vedal: "happy"
@@ -41,53 +59,77 @@ export class OutfitFeedbackDeterminator {
             message: "G-good style, Neuro. (It's just a phase...)",
             vedal: "anxious"
         },
+        [Condition.TOO_YOUNG]: {
+            message: "Uuh, I think you're too young to be wearing this",
+            vedal: "angry"
+        },
         [Condition.LAUGHING]: {
             message: "*mosquito laughing noises*",
             vedal: "happy"
+        },
+        [Condition.COOL]: {
+            message: "Coolest little cookie.",
+            vedal: "cool"
         },
         [Condition.SAME_COLOR]: {
             message: "You've got some... style, I can respect that.",
             vedal: "sarcastic"
         },
+        [Condition.HAPPY_WHEEZE]: {
+            message: "*happy femboy wheeze*",
+            vedal: "happy"
+        },
         [Condition.FULL_CUTE_SET]: {
-            message: "Cutest little cookie.",
+            message: "Cutest little cookie - just like your father back in the days.",
             vedal: "happy"
         },
         [Condition.FULL_WEIRD_SET]: {
             message: "Who is that weirdo? Where did neuro go?",
             vedal: "anxious"
         },
-        [Condition.HAPPY_WHEEZE]: {
-            message: "*happy femboy wheeze*",
-            vedal: "happy"
-        },
         [Condition.MAID_DISRESPECT]: {
             message: "This is disrespect to the maid culture.",
             vedal: "angry"
         },
-        [Condition.COOL]: {
-            message: "Coolest little cookie.",
-            vedal: "cool"
-        },
         [Condition.ALMOST_MAID]: {
             message: "Trying to look like a maid? Go do my laundry then.",
+            vedal: "sarcastic"
+        },
+        [Condition.FOR_REAL]: {
+            message: "For real? You want to show up on stream like that?",
+            vedal: "bored"
+        },
+        [Condition.WEIRDGE]: {
+            message: "Not exactly my cup of tea, but the weirdos in chat will love it.",
             vedal: "sarcastic"
         },
         [Condition.WHAT]: {
             message: "What am I looking at.",
             vedal: "sarcastic"
         },
+        [Condition.ERM]: {
+            message: "Erm... You really want to show up on stream like that?",
+            vedal: "surprised"
+        },
         [Condition.A_BIT_COMFY]: {
-            message: "looks comfy... but not comfy enough.",
+            message: "Looks comfy... but not comfy enough.",
             vedal: "sarcastic"
         },
-        [Condition.ERM]: {
-            message: "Erm.",
+        [Condition.CRAZY]: {
+            message: "That's crazy. That's actually crazy. That's messed up.",
             vedal: "surprised"
+        },
+        [Condition.GOOD_TRY]: {
+            message: "You're gonna have to try better than this to impress me.",
+            vedal: "bored"
+        },
+        [Condition.ALRIGHT]: {
+            message: "Yeah, this can be your subathon outfit.",
+            vedal: "serious"
         },
         [Condition.DEFAULT]: {
             message: "Eh, boring. Get out of my closet.",
-            vedal: "sarcastic"
+            vedal: "bored"
         }
     };
 
@@ -99,7 +141,6 @@ export class OutfitFeedbackDeterminator {
     ): FeedbackMessage {
         const conditions: Condition[] = [];
         let styles: Style[] = [];
-        console.log(styles);
         for (const item of [bottom, top, head, hair]) {
             styles.push(...item.styles);
         }
@@ -109,6 +150,7 @@ export class OutfitFeedbackDeterminator {
         for (const item of [bottom, top, head, hair]) {
             colors.push(...item.colors);
         }
+        console.log(colors);
 
         // ------------------DETERMINE-CONDITIONS-HERE-----------------
         
@@ -118,7 +160,7 @@ export class OutfitFeedbackDeterminator {
         if (styles.filter(style => style === Style.MAID).length >= 3) {
             conditions.push(Condition.FULL_MAID_SET);
         }
-        if (styles.filter(style => style === Style.COZY).length >= 3
+        if (styles.filter(style => style === Style.COZY).length >= 2
         && styles.filter(style => style === Style.WEIRD).length <= 0) {
             conditions.push(Condition.FULL_COZY_SET);
         }
@@ -130,7 +172,10 @@ export class OutfitFeedbackDeterminator {
         if (styles.filter(style => style === Style.WEIRD).length >= 1) {
             conditions.push(Condition.ERM);
         }
-        if (styles.filter(style => style === Style.COZY).length >= 2) {
+        if (styles.filter(style => style === Style.WEIRD).length >= 3) {
+            conditions.push(Condition.FULL_WEIRD_SET);
+        }
+        if (styles.filter(style => style === Style.COZY).length >= 1) {
             conditions.push(Condition.A_BIT_COMFY);
         }
         if (styles.filter(style => style === Style.PUNK).length >= 1
@@ -138,22 +183,48 @@ export class OutfitFeedbackDeterminator {
         && styles.filter(style => style === Style.SERIOUS).length >= 1) {
             conditions.push(Condition.WHAT);
         }
+        if (styles.filter(style => style === Style.PUNK).length >= 2
+        && styles.filter(style => style === Style.WEIRD).length >= 1) {
+            conditions.push(Condition.WEIRDGE);
+        }
+        if (styles.filter(style => style === Style.PUNK).length >= 1
+        && styles.filter(style => style === Style.CUTE).length >= 1) {
+            conditions.push(Condition.GOOD_TRY);
+        }
         if (styles.filter(style => style === Style.WEIRD).length >= 1
         && styles.filter(style => style === Style.REVEALING).length >= 1) {
             conditions.push(Condition.LAUGHING);
         }
-        if (top.styles.includes(Style.MAID) && bottom.styles.includes(Style.MAID)) {
+        if ((top.styles.includes(Style.MAID) && bottom.styles.includes(Style.MAID))
+        || (top.styles.includes(Style.MAID) && bottom.styles.includes(Style.CUTE))) {
             // top and bottom are both maid
             conditions.push(Condition.ALMOST_MAID);
-        } else if (top.styles.includes(Style.MAID) || bottom.styles.includes(Style.MAID)) {
-            // only either top or bottom is maid
+        } else if ((top.styles.includes(Style.MAID) && !bottom.styles.includes(Style.CUTE)) || bottom.styles.includes(Style.MAID)) {
+            // either bottom is maid while top is not maid
+            // or top is maid and skirt is not cute and not maid
             conditions.push(Condition.MAID_DISRESPECT);
         }
         if (styles.filter(style => style === Style.COOL).length >= 1) {
             conditions.push(Condition.COOL);
         }
-        if (styles.filter(style => style === Style.CUTE).length >= 4) {
+        if (styles.filter(style => style === Style.CUTE).length >= 3
+        && styles.filter(style => style === Style.WEIRD).length <= 0) {
             conditions.push(Condition.HAPPY_WHEEZE);
+        }
+        if (styles.filter(style => style === Style.GREENSCREEN).length >= 2) {
+            conditions.push(Condition.GREENSCREEN);
+        }
+        if (styles.filter(style => style === Style.DANGER).length >= 1) {
+            conditions.push(Condition.DANGER);
+        }
+        if (styles.filter(style => style === Style.REVEALING).length >= 2) {
+            conditions.push(Condition.TOO_YOUNG);
+        }
+        if (styles.filter(style => style === Style.CUTE).length >= 2) {
+            conditions.push(Condition.ALRIGHT);
+        }
+        if (styles.filter(style => style === Style.REVEALING).length >= 1) {
+            conditions.push(Condition.CRAZY);
         }
 
         if (this.allSameColor(colors)) {
@@ -167,19 +238,74 @@ export class OutfitFeedbackDeterminator {
         // ------------------CONDITION-PRIORITY--------------------
             
         const feedbackKeys = Object.keys(this.feedbackMessages) as Condition[];
-        // Return feedback with highest priority
-        return this.feedbackMessages[
+
+        const finalMessage = this.feedbackMessages[
             conditions.reduce((a, b) =>
-            feedbackKeys.indexOf(a) < feedbackKeys.indexOf(b) ? a : b
+                feedbackKeys.indexOf(a) < feedbackKeys.indexOf(b) ? a : b
             )
         ];
+        
+        // unlock condition picked by finalMessage
+        this.unlockCondition(this.findConditionForMessage(finalMessage));
+
+
+        // Return feedback with highest priority
+        return finalMessage;
     }
     
     
-    // --------------------------------------------------------------------
+    // -----------------------STORE-PROGRESS-AFTER-RELOAD-------------------------
+
+
+    // Find condition for a specific message
+    static findConditionForMessage(targetMessage: FeedbackMessage): Condition {
+        for (const [condition, message] of Object.entries(this.feedbackMessages)) {
+            if (message.message === targetMessage.message && 
+                message.vedal === targetMessage.vedal) {
+                return condition as Condition;
+            }
+        }
+        return Condition.DEFAULT;
+    }
+
+    // Get all unlocked conditions
+    static getUnlockedConditions(): Condition[] {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    }
+
+    // Unlock a new condition
+    static unlockCondition(condition: Condition): void {
+        const unlockedConditions = this.getUnlockedConditions();
+        if (!unlockedConditions.includes(condition)) {
+            unlockedConditions.push(condition);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(unlockedConditions));
+        }
+    }
 
     private static allSameColor(colors: Color[]): boolean {
         const colors_flat = Array.from(new Set(colors));
         return colors_flat.length === 1;
+    }    
+
+    // Check if a condition is unlocked
+    static isConditionUnlocked(condition: Condition): boolean {
+        return this.getUnlockedConditions().includes(condition);
+    }
+
+    // Get progress summary
+    static getProgress(): { unlocked: number; total: number } {
+        const unlockedCount = this.getUnlockedConditions().length;
+        const totalCount = Object.keys(this.feedbackMessages).length;
+        return { unlocked: unlockedCount, total: totalCount };
+    }
+
+    // Get all unlocked messages
+    static getUnlockedMessages(): Record<Condition, FeedbackMessage> {
+        const unlockedConditions = this.getUnlockedConditions();
+        return Object.fromEntries(
+            Object.entries(this.feedbackMessages)
+                .filter(([condition]) => unlockedConditions.includes(condition as Condition))
+        ) as Record<Condition, FeedbackMessage>;
     }
 }
